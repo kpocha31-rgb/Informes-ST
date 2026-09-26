@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0a1b2c">
+  <meta name="description" content="Aplicación de informes técnicos ST">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icono-st-192.png">
+  <link rel="apple-touch-icon" href="./icono-st-192.png">
+  <title>Aplicación de Informes ST</title>
+  <style>
+    :root{color-scheme:dark;font-family:Arial,Helvetica,sans-serif}
+    *{box-sizing:border-box}
+    html,body{min-height:100%;margin:0}
+    body{min-height:100dvh;display:grid;place-items:center;padding:22px;background:radial-gradient(ellipse 80% 45% at 15% 3%,rgba(67,179,94,.24),transparent 80%),linear-gradient(155deg,#17384a,#0a1b2c 72%);color:#f5fff8}
+    main{width:min(100%,420px);padding:34px 24px 26px;border:1px solid rgba(151,219,181,.28);border-radius:24px;background:linear-gradient(145deg,rgba(35,75,89,.85),rgba(13,38,57,.94));box-shadow:0 24px 70px rgba(0,0,0,.28);text-align:center}
+    img{display:block;width:96px;height:96px;margin:0 auto 19px;border-radius:22px}
+    h1{margin:0 0 26px;font-size:27px;line-height:1.15;letter-spacing:-.5px}
+    .actions{display:grid;gap:11px}
+    .action{display:grid;place-items:center;width:100%;min-height:56px;border:0;border-radius:12px;color:#fff;font-size:17px;font-weight:800;text-decoration:none;cursor:pointer}
+    .test{background:#196d9e}.install{background:linear-gradient(135deg,#3cad56,#247d42)}
+    .action:focus-visible{outline:3px solid #b2efb4;outline-offset:3px}
+    #message{min-height:0;margin:14px 0 0;color:#d8f4df;font-size:13px;line-height:1.45}
+    #message:empty{display:none}
+    footer{margin-top:24px;color:#b8d4ca;font-size:12px;font-weight:800;letter-spacing:1px}
+  </style>
+</head>
+<body>
+  <main>
+    <img src="./icono-st-192.png" alt="Icono ST">
+    <h1>Aplicación de Informes</h1>
+    <div class="actions">
+      <a class="action test" href="./app.html">Testear</a>
+      <button class="action install" id="installButton" type="button">Instalar</button>
+    </div>
+    <p id="message" role="status" aria-live="polite"></p>
+    <footer>By Facu</footer>
+  </main>
+  <script>
+    let installPrompt = null;
+    const message = document.getElementById('message');
+    const installed = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+    addEventListener('beforeinstallprompt', event => { event.preventDefault(); installPrompt = event; });
+    addEventListener('appinstalled', () => { installPrompt = null; message.textContent = 'Instalada. Abrí Informes ST desde su icono.'; });
+    document.getElementById('installButton').addEventListener('click', async () => {
+      if (installed()) { message.textContent = 'La aplicación ya está instalada.'; return; }
+      if (installPrompt) {
+        const prompt = installPrompt;
+        installPrompt = null;
+        try {
+          await prompt.prompt();
+          const choice = await prompt.userChoice;
+          message.textContent = choice.outcome === 'accepted' ? 'Instalación iniciada. Buscá el icono ST.' : 'Podés volver a intentar instalarla desde el menú del navegador.';
+        } catch (_) { message.textContent = 'Abrí el menú ⋮ de Chrome y elegí “Instalar aplicación”.'; }
+        return;
+      }
+      message.textContent = location.protocol === 'file:'
+        ? 'Para instalar, abrí esta portada desde su dirección HTTPS.'
+        : 'Abrí esta página en Chrome y elegí ⋮ → “Instalar y crear acceso directo” → “Instalar”.';
+    });
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || ['localhost', '127.0.0.1'].includes(location.hostname))) {
+      addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(error => console.warn('PWA sin conexión no disponible:', error)));
+    }
+  </script>
+</body>
+</html>
