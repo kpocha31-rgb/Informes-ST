@@ -1,0 +1,19 @@
+INFORMES TÉCNICOS ST — PWA 4.0
+
+Esta carpeta está lista para publicar completa en una dirección HTTPS, por ejemplo GitHub Pages.
+Archivo de inicio: index.html.
+
+Archivos necesarios:
+- index.html: aplicación 4.0 con lector QR y generador PDF integrados.
+- manifest.webmanifest: nombre, colores e iconos para instalar.
+- sw.js: guarda la aplicación para abrirla sin conexión.
+- icono-st-192.png, icono-st-512.png, icono-st-maskable-512.png.
+
+IMPORTANTE
+- Abrir index.html con doble clic (file://) NO instala la PWA. La instalación requiere publicarla en HTTPS o servirla desde localhost.
+- Los borradores e informes se guardan en el almacenamiento del navegador, no dentro de esta carpeta. Los datos de la versión abierta como file:// no pasan automáticamente a la futura dirección de GitHub Pages.
+- Conservá la versión anterior y sus borradores hasta comprobar los datos en la PWA. Borrar los datos del sitio o desinstalarla puede eliminar esos registros.
+- La copia sin conexión guarda el programa y los iconos; no reemplaza el respaldo de los informes PDF descargados.
+- No subir a GitHub fotos, PDF, borradores ni datos reales de clientes. Esta carpeta solo contiene el programa y los iconos.
+
+Cuando se publique en GitHub Pages, instalar desde el menú del navegador ("Instalar aplicación" o "Añadir a pantalla de inicio"). Abrirla una vez con internet para completar la copia sin conexión.
